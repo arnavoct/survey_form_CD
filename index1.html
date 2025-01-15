@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Car Features Survey</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1,maximum=5,user-scalable=1">
+
+  <!-- (Optional) Montserrat font -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    /* Basic resets + styling */
+    html, body {
+      margin: 0; padding: 0; height: 100%;
+      font-family: Verdana, sans-serif;
+      font-size: 25px;
+    }
+    .topOrangeSegment {
+      background-color: #e28743;
+      min-height: 15vh;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .topOrangeSegment img {
+      height: 40px; width: auto;
+    }
+    .middleWhiteSegment {
+      background-color: #fff;
+      min-height: 70vh;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .bottomOrangeSegment {
+      background-color: #e28743;
+      min-height: 15vh;
+      color: #fff;
+      padding: 20px; box-sizing: border-box;
+    }
+
+    .container {
+      max-width: 700px; margin: 0 auto;
+      padding: 30px; background-color: #f9f9f9;
+      border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin-top: 30px; margin-bottom: 30px;
+    }
+
+    h2, .section-title {
+      font-family: 'Montserrat', sans-serif;
+      text-align: center;
+    }
+    .section-title {
+      margin-top: 20px; margin-bottom: 10px;
+      font-size: 1.2rem;
+    }
+    #regionInput {
+      width: 100%; max-width: 300px;
+      padding: 10px; font-size: 1rem;
+      border-radius: 5px; border: 1px solid #ccc;
+    }
+
+    /* Show/Hide "pages" */
+    #page1, #page2, #page3 { display: none; }
+    #page1.active, #page2.active, #page3.active { display: block; }
+
+    button {
+      background-color: #eee; border: none; font-size: 1.2rem;
+      padding: 12px 24px; cursor: pointer; margin-top: 10px;
+      width: 100%; border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    #submitBtn { display: none; }
+
+    /* PAGE 2: smaller text so no scrolling needed */
+    #page2 { font-size: 0.8em; }
+    .featureBlocks {
+      display: flex; flex-wrap: wrap; justify-content: center; gap: 20px;
+    }
+    .featureBlock {
+      flex: 1; min-width: 200px;
+    }
+    .option-label {
+      display: flex; align-items: center; margin-bottom: 5px;
+    }
+    .option-label-checkbox {
+      transform: scale(1.1); margin-right: 10px; cursor: pointer;
+    }
+    .option-label-number {
+      width: 45px; text-align: right; margin-right: 10px; font-weight: bold;
+    }
+    .option-label-text {
+      flex: 1; text-align: left;
+    }
+
+    /* PAGE 3: pairwise */
+    .question-container {
+      margin: 20px 0; border-top: 1px solid #ccc; padding-top: 10px;
+    }
+    input[type="radio"] {
+      transform: scale(1.3); margin-right: 5px; cursor: pointer;
+    }
+
+    @media (max-width: 600px) {
+      html, body { font-size: 20px; }
+      h2 { font-size: 1.5rem; }
+      .section-title { font-size: 1rem; }
+      .option-label-number { width: 35px; }
+      button { font-size: 1em; }
+      #page2 { font-size: 0.7em; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- TOP ORANGE SEGMENT -->
+  <div class="topOrangeSegment">
+    <img
+      src="https://stimg.cardekho.com/pwa/img/carDekho-newLogo.svg"
+      alt="Top Center Image"
+    />
+  </div>
+
+  <!-- MIDDLE WHITE SEGMENT -->
+  <div class="middleWhiteSegment">
+    <div class="container">
+      <h2>Questionnaire</h2>
+
+      <!-- PAGE 1 -->
+      <div id="page1" class="active">
+        <div class="section-title">Age Range:</div>
+        <label><input type="radio" name="age" value="18-24"> 18-24</label>
+        <label><input type="radio" name="age" value="25-34"> 25-34</label>
+        <label><input type="radio" name="age" value="35-44"> 35-44</label>
+        <label><input type="radio" name="age" value="45-54"> 45-54</label>
+        <label><input type="radio" name="age" value="55-64"> 55-64</label>
+        <label><input type="radio" name="age" value="65+"> 65+</label>
+
+        <div class="section-title">Gender:</div>
+        <label><input type="radio" name="gender" value="Male"> Male</label>
+        <label><input type="radio" name="gender" value="Female"> Female</label>
+        <label><input type="radio" name="gender" value="Other"> Other</label>
+
+        <div class="section-title">Region (Search/Type-in):</div>
+        <input
+          type="text"
+          id="regionInput"
+          list="regionList"
+          oninput="filterRegionList()"
+          placeholder="Your region..."
+        />
+        <datalist id="regionList">
+          <option value="Andhra Pradesh"></option>
+          <option value="Andaman and Nicobar Islands"></option>
+          <option value="Arunachal Pradesh"></option>
+          <option value="Assam"></option>
+          <option value="Bihar"></option>
+          <option value="Chandigarh"></option>
+          <option value="Chhattisgarh"></option>
+          <option value="Dadra and Nagar Haveli and Daman & Diu"></option>
+          <option value="Delhi NCR"></option>
+          <option value="Goa"></option>
+          <option value="Gujarat"></option>
+          <option value="Haryana"></option>
+          <option value="Himachal Pradesh"></option>
+          <option value="Jammu & Kashmir"></option>
+          <option value="Jharkhand"></option>
+          <option value="Karnataka"></option>
+          <option value="Kerala"></option>
+          <option value="Ladakh"></option>
+          <option value="Lakshadweep"></option>
+          <option value="Madhya Pradesh"></option>
+          <option value="Maharashtra"></option>
+          <option value="Manipur"></option>
+          <option value="Meghalaya"></option>
+          <option value="Mizoram"></option>
+          <option value="Nagaland"></option>
+          <option value="Odisha"></option>
+          <option value="Punjab"></option>
+          <option value="Puducherry"></option>
+          <option value="Rajasthan"></option>
+          <option value="Sikkim"></option>
+          <option value="Tamil Nadu"></option>
+          <option value="Telangana"></option>
+          <option value="Tripura"></option>
+          <option value="Uttar Pradesh"></option>
+          <option value="Uttarakhand"></option>
+          <option value="West Bengal"></option>
+        </datalist>
+
+        <button onclick="goToPage2()">Next &raquo;</button>
+      </div>
+
+      <!-- PAGE 2 -->
+      <div id="page2">
+        <div class="section-title">Select exactly 10 features (from 30)</div>
+        <p id="countText">You have selected 0 out of 30. Please select exactly 10.</p>
+
+        <div class="featureBlocks">
+          <div id="checkboxesBlock1" class="featureBlock"></div>
+          <div id="checkboxesBlock2" class="featureBlock"></div>
+        </div>
+
+        <button onclick="goToPage3()">Next &raquo;</button>
+      </div>
+
+      <!-- PAGE 3 -->
+      <div id="page3">
+        <div id="pairsContainer"></div>
+        <button id="submitBtn" onclick="handleSubmit()">Submit</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottomOrangeSegment"></div>
+
+  <script>
+    /**************************************************************
+     * CONFIG: Replace with your actual Apps Script Web App URL!
+     **************************************************************/
+    const APPS_SCRIPT_WEB_APP_URL = "https://script.google.com/a/macros/girnarsoft.co.in/s/AKfycbwopf8lwpDfzFW4Kl4K3EEkWYlVzNs1caSZY6KZP_IAqmUlfRfgkgXulDrS1VW59P6v/exec";
+
+    /**************************************************************
+     * PAGE NAVIGATION
+     **************************************************************/
+    function goToPage2() {
+      const ageRadio = document.querySelector('input[name="age"]:checked');
+      const genderRadio = document.querySelector('input[name="gender"]:checked');
+      const regionInput = document.getElementById("regionInput");
+
+      if (!ageRadio) {
+        alert("Please select your age range.");
+        return;
+      }
+      if (!genderRadio) {
+        alert("Please select your gender.");
+        return;
+      }
+      if (!regionInput.value.trim()) {
+        alert("Please enter or select your region.");
+        return;
+      }
+
+      // Show Page 2, hide Page 1
+      document.getElementById("page1").classList.remove("active");
+      document.getElementById("page2").classList.add("active");
+    }
+
+    function goToPage3() {
+      if (selectedCount !== maxCheckboxes) {
+        alert("Please select exactly 10 features before proceeding.");
+        return;
+      }
+      collectSelectedOptions();
+
+      // We fetch from the Apps Script URL with action = getRandomPairs
+      fetch(APPS_SCRIPT_WEB_APP_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "getRandomPairs",
+          selectedOptions: selectedOptions
+        })
+      })
+      .then(resp => resp.json())
+      .then(data => {
+        if (data.status === "SUCCESS") {
+          displayPairs(data.pairs);
+          document.getElementById("page2").classList.remove("active");
+          document.getElementById("page3").classList.add("active");
+        } else {
+          alert("Error: " + data.message);
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        alert("Network error, please try again.");
+      });
+    }
+
+    /**************************************************************
+     * CHECKBOX OPTIONS (30 FEATURES)
+     **************************************************************/
+    let checkboxOptions = [
+      "Automatic Climate Control",
+      "Keyless Entry and Ignition",
+      "Rear AC Vents",
+      "Rear Seat Comfort (Legroom and Headroom)",
+      "Steering Reach and Height Adjustment  (Tilt and Telescopic steering wheel)",
+      "360 View Camera",
+      "ADAS (Advanced Driver Assistance System)- Lane Keep Assist, Adaptive Cruise Control etc.",
+      "Automatic Headlamps and Wipers",
+      "Cruise Control",
+      "Parking Sensors",
+      "4 Wheel Drive / All Wheel Drive",
+      "Automatic Transmission",
+      "High Engine Power Output",
+      "Digital Drivers Display (Odometer, Speedometer)",
+      "Car Mobile App Connectivity",
+      "Android Auto, Apple CarPlay: In-vehicle Infotainment",
+      "Touchscreen Infotainment Screen",
+      "Automated Electronic Tailgate",
+      "Electric Seat Adjustment",
+      "Sunroof",
+      "Ventilated Seats",
+      "High Mileage (Fuel Efficiency)",
+      "Idle Engine Automatic Stop/Start",
+      "Low Service Costs",
+      "Resale Value",
+      "6(+) Airbags",
+      "Hill Assist and Hill Hold Control",
+      "ISOFIX Child Seat Mounts",
+      "Traction Control",
+      "Tire Pressure Monitoring System (TPMS)"
+    ];
+
+    // Shuffle features (optional)
+    function shuffle(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+    shuffle(checkboxOptions);
+
+    // Split into 2 blocks of 15
+    let block1 = checkboxOptions.slice(0, 15);
+    let block2 = checkboxOptions.slice(15);
+
+    const block1Container = document.getElementById("checkboxesBlock1");
+    const block2Container = document.getElementById("checkboxesBlock2");
+
+    // Render block1
+    block1.forEach((feature, index) => {
+      const label = document.createElement("label");
+      label.className = "option-label";
+      label.innerHTML = `
+        <input
+          class="option-label-checkbox"
+          type="checkbox"
+          name="option"
+          onclick="updateCheckboxCount(this)"
+        />
+        <span class="option-label-number">${index + 1}.&nbsp;&nbsp;</span>
+        <span class="option-label-text">${feature}</span>
+      `;
+      block1Container.appendChild(label);
+    });
+
+    // Render block2
+    block2.forEach((feature, index) => {
+      const label = document.createElement("label");
+      label.className = "option-label";
+      label.innerHTML = `
+        <input
+          class="option-label-checkbox"
+          type="checkbox"
+          name="option"
+          onclick="updateCheckboxCount(this)"
+        />
+        <span class="option-label-number">${index + 16}.&nbsp;&nbsp;</span>
+        <span class="option-label-text">${feature}</span>
+      `;
+      block2Container.appendChild(label);
+    });
+
+    /**************************************************************
+     * TRACK SELECTION & FORM DATA
+     **************************************************************/
+    let formData = {
+      age: "",
+      gender: "",
+      region: "",
+      answers: []
+    };
+    let selectedCount = 0;
+    const maxCheckboxes = 10;
+    let selectedOptions = [];
+
+    function updateCheckboxCount(checkbox) {
+      if (checkbox.checked) {
+        selectedCount++;
+      } else {
+        selectedCount--;
+      }
+      document.getElementById("countText").textContent =
+        `You have selected ${selectedCount} out of 30. Please select exactly 10.`;
+
+      if (selectedCount >= maxCheckboxes) {
+        disableRemainingCheckboxes();
+      } else {
+        enableAllCheckboxes();
+      }
+    }
+
+    function disableRemainingCheckboxes() {
+      document.querySelectorAll('input[name="option"]').forEach(cb => {
+        if (!cb.checked) cb.disabled = true;
+      });
+    }
+
+    function enableAllCheckboxes() {
+      document.querySelectorAll('input[name="option"]').forEach(cb => {
+        cb.disabled = false;
+      });
+    }
+
+    function collectSelectedOptions() {
+      selectedOptions = [];
+      document.querySelectorAll('input[name="option"]').forEach(cb => {
+        if (cb.checked) {
+          const text = cb.parentNode.querySelector(".option-label-text").textContent;
+          selectedOptions.push(text.trim());
+        }
+      });
+    }
+
+    /**************************************************************
+     * PAIRWISE QUESTIONS (PAGE 3)
+     **************************************************************/
+    let pairs = [];
+    let currentPairIndex = 0;
+
+    // Renders the pairs from the server
+    function displayPairs(randomPairs) {
+      pairs = randomPairs;
+      formData.answers = new Array(pairs.length);
+      currentPairIndex = 0;
+      showPair(currentPairIndex);
+    }
+
+    function showPair(i) {
+      const container = document.getElementById("pairsContainer");
+      container.innerHTML = ""; // Clear previous question
+
+      if (i >= pairs.length) {
+        container.innerHTML = "<h3>All pairwise questions answered!</h3>";
+        document.getElementById("submitBtn").style.display = "inline-block";
+        return;
+      }
+
+      const pair = pairs[i];
+      const div = document.createElement("div");
+      div.className = "question-container";
+      div.innerHTML = `
+        <p>Which do you prefer?</p>
+        <label>
+          <input type="radio" name="pair${i}" value="${pair[0]}"
+            onchange="recordAnswer(${i}, '${pair[0]}')">
+          ${pair[0]}
+        </label>
+        <label>
+          <input type="radio" name="pair${i}" value="${pair[1]}"
+            onchange="recordAnswer(${i}, '${pair[1]}')">
+          ${pair[1]}
+        </label>
+      `;
+      container.appendChild(div);
+    }
+
+    function recordAnswer(index, answer) {
+      formData.answers[index] = answer;
+      currentPairIndex++;
+      showPair(currentPairIndex);
+    }
+
+    /**************************************************************
+     * FINAL SUBMISSION
+     **************************************************************/
+    function handleSubmit() {
+      // Fill from Page 1
+      const ageRadio = document.querySelector('input[name="age"]:checked');
+      const genderRadio = document.querySelector('input[name="gender"]:checked');
+      const regionInput = document.getElementById("regionInput");
+
+      formData.age = ageRadio ? ageRadio.value : "";
+      formData.gender = genderRadio ? genderRadio.value : "";
+      formData.region = regionInput.value.trim();
+
+      // Validate final
+      if (selectedCount !== maxCheckboxes) {
+        alert("Please select exactly 10 features.");
+        return;
+      }
+      if (formData.answers.includes(undefined)) {
+        alert("Please answer all pairwise comparisons.");
+        return;
+      }
+
+      // POST to Apps Script with action = processForm
+      fetch(APPS_SCRIPT_WEB_APP_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "processForm",
+          formData: formData
+        })
+      })
+      .then(resp => resp.json())
+      .then(data => {
+        if (data.status === "SUCCESS") {
+          alert("Form submitted successfully!");
+        } else {
+          alert("Error: " + data.message);
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        alert("Network error, please try again.");
+      });
+    }
+
+    /**************************************************************
+     * REGION AUTOCOMPLETE FILTER
+     **************************************************************/
+    function filterRegionList() {
+      const input = document.getElementById("regionInput").value.toLowerCase();
+      document.querySelectorAll("#regionList option").forEach(opt => {
+        opt.style.display = opt.value.toLowerCase().includes(input) ? "" : "none";
+      });
+    }
+  </script>
+</body>
+</html>
